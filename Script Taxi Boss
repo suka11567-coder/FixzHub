@@ -80,9 +80,11 @@ local Window = Fluent:CreateWindow({
 
 local Tabs = {
     Farm = Window:AddTab({ Title = "⌚ Farm", Icon = "watch" }),
+    Resources = Window:AddTab({ Title = "💎 Resources", Icon = "gem" }),
     Money = Window:AddTab({ Title = "💰 Money", Icon = "dollar-sign" }),
     Race = Window:AddTab({ Title = "🏁 Race", Icon = "flag" }),
     Teleports = Window:AddTab({ Title = "📍 Teleports", Icon = "map-pin" }),
+	Vehicle = Window:AddTab({ Title = "🚕 Vehicle", Icon = "car" }),
     Misc = Window:AddTab({ Title = "⚙️ Misc", Icon = "wrench" }),
     Settings = Window:AddTab({ Title = "🔧 Settings", Icon = "settings" })
 }
@@ -157,7 +159,12 @@ AutoPumpkin:OnChanged(function(state)
     end
 end)
 
-local AutoParts = Tabs.Farm:AddToggle("AutoParts", {
+Tabs.Resources:AddParagraph({
+    Title = "Farming Features",
+    Content = "Automatically collect all vehicle part and other items"
+})
+
+local AutoParts = Tabs.Resources:AddToggle("AutoParts", {
     Title = "Auto Collect Parts",
     Description = "Automatically teleport and collect vehicle parts",
     Default = false
@@ -184,6 +191,8 @@ AutoParts:OnChanged(function(state)
         end
     end
 end)
+
+
 
 -- MONEY TAB
 Tabs.Money:AddParagraph({
@@ -335,7 +344,7 @@ Tabs.Teleports:AddParagraph({
 })
 
 local locations1 = {
-    "Beechwood", "Beechwood Beach", "Boss Airport", "Bridgeview",
+    "none", "Beechwood", "Beechwood Beach", "Boss Airport", "Bridgeview",
     "Cedar Side", "Central Bank", "Central City", "City Park",
     "Coconut Park", "Country Club", "Da Hills", "Doge Harbor"
 }
@@ -357,7 +366,7 @@ TeleportDropdown1:OnChanged(function(value)
 end)
 
 local locations2 = {
-    "Ocean Viewpoint", "Oil Refinery", "Old Town", "Popular Street",
+    "none", "Ocean Viewpoint", "Oil Refinery", "Old Town", "Popular Street",
     "Small Town", "St. Noll Viewpoint", "Sunny Elementary", "Sunset Grove",
     "Taxi Central", "high school", "mall", "the beach", "🏆 Race Club"
 }
@@ -377,14 +386,63 @@ TeleportDropdown2:OnChanged(function(value)
         Duration = 3
     })
 end)
-
--- MISC TAB
-Tabs.Misc:AddParagraph({
-    Title = "Miscellaneous Features",
-    Content = "Various utility features and tools"
+--VEHICLE TAB
+local steppedConnection
+local velocityMult = 1.025
+local velocityEnabledKeyCode = Enum.KeyCode.W
+Tabs.Vehicle:AddParagraph({
+    Title = "Vehicle Features",
+    Content = "Special features for your vehicle"
 })
 
-local VehicleInput = Tabs.Misc:AddInput("VehicleInput", {
+Tabs.Vehicle:AddToggle("InfAcceleration", {
+    Title = "Inf Acceleration",
+    Description = "Inf acceleration boost",
+    Default = false
+}):OnChanged(function(state)
+    if state then
+
+        steppedConnection = game:GetService("RunService").Stepped:Connect(function()
+            if game:GetService("UserInputService"):IsKeyDown(velocityEnabledKeyCode) then
+                local Character = game:GetService("Players").LocalPlayer.Character
+                if Character and typeof(Character) == "Instance" then
+                    local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
+                    if Humanoid and typeof(Humanoid) == "Instance" then
+                        local SeatPart = Humanoid.SeatPart
+                        if SeatPart and typeof(SeatPart) == "Instance" and SeatPart:IsA("VehicleSeat") then
+                            SeatPart.AssemblyLinearVelocity *= Vector3.new(0 + velocityMult, 1, 0 + velocityMult)
+                        end
+                    end
+                end
+            end
+        end)
+    else
+
+        if steppedConnection then
+            steppedConnection:Disconnect()
+            steppedConnection = nil
+        end
+    end
+end)
+
+local DonutGod = Tabs.Vehicle:AddToggle("DonutGod", {
+    Title = "Donut God",
+    Description = "Make your car spin like a donut",
+    Default = false
+})
+
+DonutGod:OnChanged(function(state)
+    getfenv().donut = state
+    while getfenv().donut do
+        task.wait()
+        pcall(function()
+            local part = game.Players.LocalPlayer.Character.Humanoid.SeatPart
+            part.RotVelocity = Vector3.new(0, part.RotVelocity.Y + 10, 0)
+        end)
+    end
+end)
+
+local VehicleInput = Tabs.Vehicle:AddInput("VehicleInput", {
     Title = "Vehicle Name",
     Description = "Enter vehicle name to purchase",
     Default = "",
@@ -405,6 +463,13 @@ local VehicleInput = Tabs.Misc:AddInput("VehicleInput", {
         end
     end
 })
+
+-- MISC TAB
+Tabs.Misc:AddParagraph({
+    Title = "Miscellaneous Features",
+    Content = "Various utility features and tools"
+})
+
 
 Tabs.Misc:AddButton({
     Title = "Unlock Taxi Radar",
@@ -478,22 +543,6 @@ Tabs.Misc:AddButton({
     end
 })
 
-local DonutGod = Tabs.Misc:AddToggle("DonutGod", {
-    Title = "Donut God",
-    Description = "Make your car spin like a donut",
-    Default = false
-})
-
-DonutGod:OnChanged(function(state)
-    getfenv().donut = state
-    while getfenv().donut do
-        task.wait()
-        pcall(function()
-            local part = game.Players.LocalPlayer.Character.Humanoid.SeatPart
-            part.RotVelocity = Vector3.new(0, part.RotVelocity.Y + 10, 0)
-        end)
-    end
-end)
 
 -- SETTINGS TAB
 SaveManager:SetLibrary(Fluent)
