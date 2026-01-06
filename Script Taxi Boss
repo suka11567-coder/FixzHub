@@ -1,8 +1,3 @@
--- KOUMALA HUB | TAXI BOSS
--- Fixed Fluent UI Version
-
-print("🚖 Loading Fixz Hub...")
-
 local VirtualUser = game:GetService("VirtualUser")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -79,17 +74,17 @@ local Window = Fluent:CreateWindow({
 })
 
 local Tabs = {
-    Farm = Window:AddTab({ Title = "⌚ Farm", Icon = "watch" }),
+    Event = Window:AddTab({ Title = "⌚ Event Farm", Icon = "watch" }),
     Resources = Window:AddTab({ Title = "💎 Resources", Icon = "gem" }),
     Money = Window:AddTab({ Title = "💰 Money", Icon = "dollar-sign" }),
     Race = Window:AddTab({ Title = "🏁 Race", Icon = "flag" }),
     Teleports = Window:AddTab({ Title = "📍 Teleports", Icon = "map-pin" }),
-	Vehicle = Window:AddTab({ Title = "🚕 Vehicle", Icon = "car" }),
+    Vehicle = Window:AddTab({ Title = "🚕 Vehicle", Icon = "car" }),
     Misc = Window:AddTab({ Title = "⚙️ Misc", Icon = "wrench" }),
     Settings = Window:AddTab({ Title = "🔧 Settings", Icon = "settings" })
 }
 
-Tabs.Farm:AddParagraph({
+Tabs.Event:AddParagraph({
     Title = "Farming Features",
     Content = "Automatically functions (Only on event locations)"
 })
@@ -118,7 +113,7 @@ local SpawnedSnowPiles = Workspace:WaitForChild("SpawnedSnowPiles")
 end
 
 
-local AutoSnow = Tabs.Farm:AddToggle("AutoSnow", {
+local AutoSnow = Tabs.Event:AddToggle("AutoSnow", {
     Title = "Auto Teleport Snow Piles",
     Description = "Teleports snow piles to your character",
     Default = false
@@ -134,7 +129,7 @@ end)
 
 
 
-local AutoPumpkin = Tabs.Farm:AddToggle("AutoPumpkin", {
+local AutoPumpkin = Tabs.Event:AddToggle("AutoPumpkin", {
     Title = "Auto Destroy Pumpkins",
     Description = "Automatically destroy pumpkins for candy",
     Default = false
@@ -558,13 +553,4 @@ InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 
 Window:SelectTab(1)
-
-Fluent:Notify({
-    Title = "Koumala Hub Loaded!",
-    Content = "🚖 Taxi Boss script loaded successfully",
-    Duration = 5
-})
-
 SaveManager:LoadAutoloadConfig()
-
-print("✅ Koumala Hub fully loaded!")
