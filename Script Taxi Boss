@@ -65,7 +65,6 @@ print("Creating window...")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 
-local SpawnedSnowPiles = Workspace:WaitForChild("SpawnedSnowPiles")
 local LocalPlayer = Players.LocalPlayer
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -94,6 +93,8 @@ Tabs.Farm:AddParagraph({
 })
 
 local function teleportSnowPiles()
+
+local SpawnedSnowPiles = Workspace:WaitForChild("SpawnedSnowPiles")
     if not LocalPlayer or not LocalPlayer.Character then
         return
     end
