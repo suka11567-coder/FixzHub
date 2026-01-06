@@ -3,7 +3,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local VirtualInputManager = game:GetService("VirtualInputManager")
-
 -- Anti-AFK
 game:GetService("Players").LocalPlayer.Idled:connect(function()
     VirtualUser:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
