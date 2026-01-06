@@ -113,8 +113,8 @@ end
 
 
 local AutoSnow = Tabs.Event:AddToggle("AutoSnow", {
-    Title = "Auto Teleport Snow Piles",
-    Description = "Teleports snow piles to your character",
+    Title = "Auto Collect Snow Piles",
+    Description = "Collect snow piles for reward",
     Default = false
 })
 
