@@ -1,0 +1,164 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/suka11567-coder/FixzHub/refs/heads/main/welcome"))();
+local VirtualUser = game:GetService("VirtualUser")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+-- Anti-AFK
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+    VirtualUser:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+    wait(1)
+    VirtualUser:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+end)
+
+
+
+-- Load Fluent UI
+print("Loading Fluent UI...")
+local success, Fluent = pcall(function()
+    return loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+end)
+
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+print("Creating window...")
+
+-- Create Tabs
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+
+local LocalPlayer = Players.LocalPlayer
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Fixz Hub | + 1 Speed Car Tsunami Escape ",
+    SubTitle = "by suka11567",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Tabs = {
+    Event = Window:AddTab({ Title = "🚩 Auto Farm", Icon = "flag" }),
+    Misc = Window:AddTab({ Title = "⚙️ Misc", Icon = "wrench" }),
+    Settings = Window:AddTab({ Title = "🔧 Settings", Icon = "settings" })
+}
+
+Tabs.Event:AddParagraph({
+    Title = "Farming Features",
+    Content = "Auto funct"
+})
+
+local function teleportToWinStage()
+    if not LocalPlayer or not LocalPlayer.Character then return end
+    
+    local primaryPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart") or 
+                       LocalPlayer.Character:FindFirstChild("Head")
+    if not primaryPart then return end
+    
+    local targetPart = workspace.WinStages["Stage 17"].Return.Touch
+    if targetPart then
+        primaryPart.CFrame = targetPart.CFrame * CFrame.new(0, 3, 0)
+        task.wait(0.1)
+        if targetPart:IsA("BasePart") then
+            firetouchinterest(primaryPart, targetPart, 0)
+            task.wait(0.1)
+            firetouchinterest(primaryPart, targetPart, 1)
+        end
+    end
+end
+
+
+local AutoWins = Tabs.Event:AddToggle("AutoWins", {
+    Title = "Auto win farming",
+    Description = "Get 10k/s",
+    Default = false
+})
+
+
+AutoWins:OnChanged(function(state)
+    getfenv().teleportSnow = state
+    while getfenv().teleportSnow do
+        task.wait(0.5)
+        pcall(teleportToWinStage)
+    end
+end)
+
+local SpeedFarm = Tabs.Event:AddToggle("SpeedFarm", {
+    Title = "Speed farming",
+    Description = "",
+    Default = false
+})
+
+local function teleporttoto()
+    if not LocalPlayer or not LocalPlayer.Character then return end
+    
+    local primaryPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart") or 
+                       LocalPlayer.Character:FindFirstChild("Head")
+    if not primaryPart then return end
+    
+    local treadmills = workspace:FindFirstChild("Treadmills")
+    if not treadmills then return end
+    
+    local targetModel = treadmills:GetChildren()[11]
+    if not targetModel then return end
+    
+    local targetPart = targetModel:FindFirstChildWhichIsA("BasePart")
+    if not targetPart then return end
+    
+    primaryPart.CFrame = targetPart.CFrame * CFrame.new(0, 3, 0)
+    task.wait(5)
+end
+
+SpeedFarm:OnChanged(function(state)
+    getfenv().speedFarming = state
+    while getfenv().speedFarming do
+        pcall(teleporttoto)
+    end
+end)
+
+--MISC TAB 
+Tabs.Misc:AddButton({
+    Title = "Unlock VIP",
+    Description = "Unlock VIP",
+    Callback = function()
+        workspace.vipDoors:Destroy()
+        Fluent:Notify({
+            Title = "Unlocked!",
+            Content = "",
+            Duration = 3
+        })
+    end
+})
+Tabs.Misc:AddButton({
+    Title = "Desable Waves",
+    Description = "Destroying",
+    Callback = function()
+        workspace.Tsunamis2:Destroy()
+        workspace.Tsunamis:Destroy()
+        Fluent:Notify({
+            Title = "Destroyed!",
+            Content = "",
+            Duration = 3
+        })
+    end
+})
+
+-- SETTINGS TAB
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+
+InterfaceManager:SetFolder("KoumalaHub")
+SaveManager:SetFolder("KoumalaHub/TaxiBoss")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+Window:SelectTab(1)
+SaveManager:LoadAutoloadConfig()
